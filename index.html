@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>TechFix | Manutenção de Computadores</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts: Inter + Space Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f8f6f4 0%, #ece8e4 100%);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        /* Fundo quadriculado (grid) bem marcante, como solicitado */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(to right, rgba(225, 2, 8, 0.12) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(225, 2, 8, 0.12) 1px, transparent 1px);
+            background-size: 32px 32px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* camada adicional de grid mais sutil para profundidade */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+            background-size: 64px 64px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* elementos decorativos com a cor base */
+        .tech-glow {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(225,2,8,0.06) 0%, rgba(225,2,8,0) 70%);
+            border-radius: 50%;
+            bottom: -150px;
+            right: -100px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .tech-glow-2 {
+            position: fixed;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(225,2,8,0.05) 0%, rgba(225,2,8,0) 70%);
+            top: -120px;
+            left: -80px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Card principal - minimalista com fundo levemente translúcido */
+        .card {
+            position: relative;
+            z-index: 10;
+            max-width: 560px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(8px);
+            border-radius: 2rem;
+            padding: 2rem 2rem 2.2rem;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 30px 50px -16px rgba(225, 2, 8, 0.15);
+        }
+
+        /* Container da imagem (logo) - substituível */
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .company-logo {
+            width: 200px;
+            height: auto;
+            object-fit: cover;
+           
+            box-shadow: 0 12px 20px -8px rgba(0, 0, 0, 0.15);
+            transition: transform 0.2s ease, border-color 0.2s ease;
+            background: #f0ede8; /* fallback enquanto não há imagem */
+        }
+        
+        .company-logo:hover {
+            transform: scale(1.02);
+            border-color: #E10208;
+        }
+        
+        /* Placeholder visual enquanto não substitui a imagem */
+        /* O usuário pode substituir o src pelo caminho da sua logo */
+
+        /* Nome da empresa */
+        .business-name {
+            text-align: center;
+            font-weight: 800;
+            font-size: 2rem;
+            letter-spacing: -0.02em;
+            background: linear-gradient(120deg, #1e2a36, #E10208);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.3rem;
+        }
+
+        .tagline {
+            text-align: center;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            color: #E10208;
+            background: rgba(225, 2, 8, 0.08);
+            display: inline-block;
+            width: auto;
+            margin: 0 auto 1rem;
+            padding: 0.3rem 1.2rem;
+            border-radius: 40px;
+            letter-spacing: -0.2px;
+            border: 0.5px solid rgba(225,2,8,0.25);
+        }
+
+        .desc {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #3a4a52;
+            margin-bottom: 2rem;
+            line-height: 1.45;
+            font-weight: 450;
+            background: rgba(245, 240, 235, 0.7);
+            padding: 0.7rem 1rem;
+            border-radius: 20px;
+        }
+
+        /* Botões retangulares com bordas arredondadas (border-radius médio, estilo "pill retangular") */
+        .links-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 18px;  /* bordas arredondadas, porém retangulares (não totalmente pill) */
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.25s ease;
+            border: 1px solid #e5dfd9;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+            color: #1f2e38;
+            gap: 12px;
+        }
+
+        /* Lado esquerdo do botão (ícone + texto) */
+        .btn-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .btn-text {
+            font-weight: 600;
+            letter-spacing: -0.2px;
+        }
+
+        .btn-right-icon {
+            color: #a0a0a0;
+            font-size: 0.85rem;
+            transition: transform 0.2s ease, color 0.2s;
+        }
+
+        /* Botões com destaque na cor base (#E10208) */
+        .btn-whatsapp .btn-left i {
+            color: #E10208;
+            font-size: 1.6rem;
+        }
+
+        .btn-instagram .btn-left i {
+            color: #E10208;
+            font-size: 1.6rem;
+        }
+
+        /* Hover dos botões */
+        .btn-link:hover {
+            background: #fffbf9;
+            border-color: #E10208;
+            box-shadow: 0 8px 18px -8px rgba(225, 2, 8, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn-link:hover .btn-right-icon {
+            color: #E10208;
+            transform: translateX(4px);
+        }
+
+        /* Badge tech minimalista */
+        .tech-badge {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-top: 0.5rem;
+            font-size: 0.7rem;
+            font-family: 'Space Mono', monospace;
+            color: #5f6a6f;
+            border-top: 1px solid rgba(225, 2, 8, 0.2);
+            padding-top: 1.3rem;
+            flex-wrap: wrap;
+        }
+        
+        .tech-badge span {
+            background: rgba(250, 245, 240, 0.9);
+            padding: 0.25rem 0.9rem;
+            border-radius: 30px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .tech-badge i {
+            font-size: 0.7rem;
+            color: #E10208;
+        }
+
+        /* selo de garantia / rodapé */
+        .footer-note {
+            text-align: center;
+            margin-top: 1.2rem;
+            font-size: 0.65rem;
+            color: #8b7a74;
+            font-family: monospace;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-note span i {
+            margin-right: 4px;
+            color: #E10208;
+        }
+
+        /* Responsivo */
+        @media (max-width: 480px) {
+            .card {
+                padding: 1.5rem 1.2rem 1.8rem;
+            }
+            .business-name {
+                font-size: 1.65rem;
+            }
+            .btn-link {
+                padding: 0.85rem 1.2rem;
+                border-radius: 16px;
+            }
+            .btn-left i {
+                font-size: 1.3rem !important;
+            }
+            .btn-text {
+                font-size: 0.9rem;
+            }
+            .company-logo {
+                width: 80px;
+                height: 80px;
+                border-radius: 20px;
+            }
+            .tagline {
+                font-size: 0.7rem;
+            }
+            .desc {
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Elemento decorativo microchip */
+        .microchip-bg {
+            position: absolute;
+            bottom: 12px;
+            left: 18px;
+            opacity: 0.15;
+            font-size: 2.5rem;
+            pointer-events: none;
+            color: #E10208;
+        }
+    </style>
+</head>
+<body>
+
+<div class="tech-glow"></div>
+<div class="tech-glow-2"></div>
+
+<div class="card">
+    <div class="microchip-bg">
+        <i class="fas fa-microchip"></i>
+    </div>
+
+    <!-- IMAGEM NO TOPO: substitua o src pelo caminho da sua logo -->
+    <div class="logo-container">
+        <img class="company-logo" 
+             src="c:\Users\Aora Tecnologia\Desktop\logo-pequena.png" 
+             onerror="this.onerror=null; this.src='c:\Users\Aora Tecnologia\Desktop\logo-pequena.png'">
+        <!-- Dica: substitua o src acima pelo link da sua imagem real.
+             Exemplo: src="sua-imagem.png" 
+             Mantenha a classe "company-logo" para estilos. -->
+    </div>
+
+    <div class="business-name">
+        <span style="font-weight:600;">Manutenção em Computadores</span>
+    </div>
+    <div style="text-align: center;">
+        <div class="tagline">
+            <i class="fas fa-microchip" style="margin-right: 6px;"></i> manutenção & performance
+        </div>
+    </div>
+
+    <div class="desc">
+        <i class="fas fa-desktop" style="margin-right: 8px;"></i> 
+        Diagnóstico especializado · Notebooks, PCs Gamers e Redes · Atendimento ágil
+    </div>
+
+    <!-- Botões retangulares com bordas arredondadas (border-radius 18px) -->
+    <div class="links-container">
+        <!-- Botão WhatsApp -->
+        <a href="https://wa.me/5511999999999?text=Olá!%20Preciso%20de%20manutenção%20no%20meu%20computador." 
+           class="btn-link btn-whatsapp" 
+           target="_blank" 
+           rel="noopener noreferrer">
+            <div class="btn-left">
+                <i class="fab fa-whatsapp"></i>
+                <span class="btn-text">WhatsApp · Fale conosco</span>
+            </div>
+            <div class="btn-right-icon">
+                <i class="fas fa-arrow-right"></i>
+            </div>
+        </a>
+
+        <!-- Botão Instagram -->
+        <a href="https://www.instagram.com/techfix_manutencao" 
+           class="btn-link btn-instagram" 
+           target="_blank" 
+           rel="noopener noreferrer">
+            <div class="btn-left">
+                <i class="fab fa-instagram"></i>
+                <span class="btn-text">Instagram · Acompanhe nossos cases</span>
+            </div>
+            <div class="btn-right-icon">
+                <i class="fas fa-arrow-right"></i>
+            </div>
+        </a>
+    </div>
+
+    <!-- badges com tecnologia e serviços -->
+    <div class="tech-badge">
+        <span><i class="fas fa-memory"></i> Memória RAM</span>
+        <span><i class="fas fa-hdd"></i> SSD/HD</span>
+        <span><i class="fas fa-network-wired"></i> Redes</span>
+        <span><i class="fas fa-gamepad"></i> Gaming</span>
+    </div>
+
+    <div class="footer-note">
+        <span><i class="far fa-clock"></i> Suporte rápido</span>
+        <span><i class="fas fa-shield-alt"></i> Garantia de 90 dias</span>
+        <span><i class="fas fa-map-marker-alt"></i> Assistência local</span>
+    </div>
+</div>
+
+<script>
+    // pequena interação para suavizar entrada dos botões
+    document.addEventListener('DOMContentLoaded', () => {
+        const btns = document.querySelectorAll('.btn-link');
+        btns.forEach((btn, idx) => {
+            btn.style.opacity = '0';
+            btn.style.transform = 'translateY(10px)';
+            setTimeout(() => {
+                btn.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                btn.style.opacity = '1';
+                btn.style.transform = 'translateY(0)';
+            }, 80 + (idx * 70));
+        });
+        console.log('TechFix - Cartão virtual | Botões retangulares com bordas arredondadas e imagem substituível');
+    });
+</script>
+</body>
+</html>
